@@ -6,20 +6,23 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
   <link rel="dns-prefetch" href="https://jakever.github.io">
-  <title>Archives: 2020/9 | Harlen的博客</title>
+  <title>详解FormData 、Blob、File、FileReader、ArrayBuffer | Harlen&#39;s Blog</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="前端忠实粉一枚，喜欢前端，热爱大自然">
-<meta property="og:type" content="website">
-<meta property="og:title" content="Harlen的博客">
-<meta property="og:url" content="https://jakever.github.io/archives/2020/09/index.html">
-<meta property="og:site_name" content="Harlen的博客">
-<meta property="og:description" content="前端忠实粉一枚，喜欢前端，热爱大自然">
+  <meta name="description" content="详解FormData 、Blob、File、FileReader、ArrayBuffer、URL、URLSearchParams对象，实现向后台发送二进制数据流、大文件的分片上传及文件上传下载等功能">
+<meta property="og:type" content="article">
+<meta property="og:title" content="详解FormData 、Blob、File、FileReader、ArrayBuffer">
+<meta property="og:url" content="https://jakever.github.io/2019/09/26/%E8%AF%A6%E8%A7%A3FormData%20%E3%80%81Blob%E3%80%81File%E3%80%81FileReader%E3%80%81ArrayBuffer/index.html">
+<meta property="og:site_name" content="Harlen&#39;s Blog">
+<meta property="og:description" content="详解FormData 、Blob、File、FileReader、ArrayBuffer、URL、URLSearchParams对象，实现向后台发送二进制数据流、大文件的分片上传及文件上传下载等功能">
 <meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2019-09-26T07:20:18.000Z">
+<meta property="article:modified_time" content="2020-09-26T11:48:01.514Z">
 <meta property="article:author" content="Harlen">
-<meta property="article:tag" content="前端,js,javascript,html5,nodejs,开发者,程序猿,程序媛,极客,编程,代码,开源,IT网站,Developer,Programmer,Coder,Geek,html,css,css3,用户体验">
+<meta property="article:tag" content="技术">
+<meta property="article:tag" content="javascript">
 <meta name="twitter:card" content="summary">
   
-    <link rel="alternative" href="/atom.xml" title="Harlen的博客" type="application/atom+xml">
+    <link rel="alternative" href="/atom.xml" title="Harlen&#39;s Blog" type="application/atom+xml">
   
   
     <link rel="icon" href="/assets/img/code.png">
@@ -88,11 +91,11 @@
 				
 					<a class="github" target="_blank" href="https://github.com/jakever" title="github"><i class="icon-github"></i></a>
 		        
-					<a class="weibo" target="_blank" href="#" title="weibo"><i class="icon-weibo"></i></a>
-		        
-					<a class="rss" target="_blank" href="#" title="rss"><i class="icon-rss"></i></a>
+					<a class="weibo" target="_blank" href="https://weibo.com/7088245617/profile?topnav=1&wvr=6&is_all=1" title="weibo"><i class="icon-weibo"></i></a>
 		        
 					<a class="jianshu" target="_blank" href="https://www.jianshu.com/u/859464966ebf" title="jianshu"><i class="icon-jianshu"></i></a>
+		        
+					<a class="mail" target="_blank" href="mailto:hualiang_luan@163.com" title="mail"><i class="icon-mail"></i></a>
 		        
 			</div>
 		</nav>
@@ -135,11 +138,11 @@
 					
 						<a class="github" target="_blank" href="https://github.com/jakever" title="github"><i class="icon-github"></i></a>
 			        
-						<a class="weibo" target="_blank" href="#" title="weibo"><i class="icon-weibo"></i></a>
-			        
-						<a class="rss" target="_blank" href="#" title="rss"><i class="icon-rss"></i></a>
+						<a class="weibo" target="_blank" href="https://weibo.com/7088245617/profile?topnav=1&wvr=6&is_all=1" title="weibo"><i class="icon-weibo"></i></a>
 			        
 						<a class="jianshu" target="_blank" href="https://www.jianshu.com/u/859464966ebf" title="jianshu"><i class="icon-jianshu"></i></a>
+			        
+						<a class="mail" target="_blank" href="mailto:hualiang_luan@163.com" title="mail"><i class="icon-mail"></i></a>
 			        
 				</div>
 			</nav>
@@ -169,49 +172,270 @@
             <canvas data-colors="#eaeaea" data-sectionHeight="100" data-contentId="js-content" id="myCanvas1" class="anm-canvas"></canvas>
           </div>
           <div id="js-content" class="content-ll">
-            
-  
-  
+            <article id="post-详解FormData 、Blob、File、FileReader、ArrayBuffer" class="article article-type-post " itemscope itemprop="blogPost">
+  <div class="article-inner">
     
-    
-      
-      
-      <section class="archives-wrap">
-        <div class="archive-year-wrap">
-          <a href="/archives/2020" class="archive-year">2020</a>
-        </div>
-        <div class="archives">
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2020/09/26/hello-world/" class="archive-article-date">
-  	<time datetime="2020-09-26T06:42:29.317Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2020-09-26</time>
-</a>
-        </div>
-    	 
+      <header class="article-header">
+        
   
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2020/09/26/hello-world/">Hello World</a>
+    <h1 class="article-title" itemprop="name">
+      详解FormData 、Blob、File、FileReader、ArrayBuffer
     </h1>
   
 
-        <div class="article-info info-on-right">
-          
-          
+        
+        <a href="/2019/09/26/%E8%AF%A6%E8%A7%A3FormData%20%E3%80%81Blob%E3%80%81File%E3%80%81FileReader%E3%80%81ArrayBuffer/" class="archive-article-date">
+  	<time datetime="2019-09-26T07:20:18.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-09-26</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h3 id="一-FormData"><a href="#一-FormData" class="headerlink" title="一. FormData"></a>一. FormData</h3><blockquote>
+<p>利用<code>FormData对象</code>,我们可以通过JavaScript用一些键值对来模拟一系列表单控件,我们还可以使用XMLHttpRequest的<a target="_blank" rel="noopener" href="https://developer.mozilla.org/zh-CN/DOM/XMLHttpRequest#send%28%29" title="zh-CN/XMLHttpRequest#send()"><code>send()</code></a>方法来异步的提交这个”表单”.比起普通的ajax,使用<code>FormData</code>的最大优点就是我们可以异步上传一个二进制文件.</p>
+</blockquote>
+<p><strong>方法：</strong></p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> formData = <span class="keyword">new</span> FormData();</span><br><span class="line">formData.append(<span class="string">&quot;k1&quot;</span>, <span class="string">&quot;v1&quot;</span>); <span class="comment">//append()方法的第二个参数可以是File,Blob对象</span></span><br><span class="line">formData.append(<span class="string">&quot;k1&quot;</span>, <span class="string">&quot;v2&quot;</span>);</span><br><span class="line">formData.get(<span class="string">&quot;k1&quot;</span>); <span class="comment">// // &quot;v1&quot; 获取key为name的第一个值</span></span><br><span class="line">formData.getAll(<span class="string">&quot;k1&quot;</span>); <span class="comment">// [&quot;v1&quot;,&quot;v2&quot;] 返回一个数组，获取key为name的所有值</span></span><br><span class="line">formData.set(<span class="string">&quot;k1&quot;</span>, <span class="string">&quot;1&quot;</span>); <span class="comment">//设置修改数据</span></span><br><span class="line">formData.has(<span class="string">&quot;k1&quot;</span>); <span class="comment">// true 来判断是否有对应的key值</span></span><br><span class="line">formData.has(<span class="string">&quot;k2&quot;</span>); <span class="comment">// false</span></span><br><span class="line">formData.delete(<span class="string">&quot;k1&quot;</span>); <span class="comment">//删除数据</span></span><br></pre></td></tr></table></figure>
+<p>根据已有form表单初始化一个formData对象：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 获取页面已有的一个form表单</span></span><br><span class="line"><span class="keyword">var</span> form = <span class="built_in">document</span>.getElementById(<span class="string">&quot;myForm&quot;</span>);</span><br><span class="line"><span class="comment">// 用表单来初始化</span></span><br><span class="line"><span class="keyword">var</span> formData = <span class="keyword">new</span> FormData(form);</span><br><span class="line"><span class="comment">// 我们可以根据name来访问表单中的字段</span></span><br><span class="line"><span class="keyword">var</span> name = formData.get(<span class="string">&quot;name&quot;</span>); <span class="comment">// 获取名字</span></span><br><span class="line"><span class="keyword">var</span> psw = formData.get(<span class="string">&quot;pw&quot;</span>); <span class="comment">// 获取密码</span></span><br><span class="line"><span class="comment">// 当然也可以在此基础上，添加其他数据</span></span><br><span class="line">formData.append(<span class="string">&quot;token&quot;</span>,<span class="string">&quot;kshdfiwi3rh&quot;</span>);</span><br></pre></td></tr></table></figure>
+<p>发送一个二进制数据流：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> content = <span class="string">&#x27;&lt;a id=&quot;a&quot;&gt;&lt;b id=&quot;b&quot;&gt;hey!&lt;/b&gt;&lt;/a&gt;&#x27;</span>; </span><br><span class="line"><span class="keyword">var</span> blob = <span class="keyword">new</span> Blob([content], &#123; <span class="attr">type</span>: <span class="string">&quot;text/xml&quot;</span>&#125;);</span><br><span class="line">formData.append(<span class="string">&quot;file&quot;</span>, blob);</span><br><span class="line">axios.post(<span class="string">&#x27;http://demo.api.com/doSomething&#x27;</span>, formData,</span><br><span class="line">    &#123;</span><br><span class="line">        headers: &#123;</span><br><span class="line">            <span class="string">&#x27;Content-Type&#x27;</span>: <span class="string">&#x27;multipart/form-data&#x27;</span></span><br><span class="line">       &#125;</span><br><span class="line">   &#125;</span><br><span class="line">)</span><br></pre></td></tr></table></figure>
+<h3 id="二-Blob"><a href="#二-Blob" class="headerlink" title="二. Blob"></a>二. Blob</h3><blockquote>
+<p>一个Blob对象就是一个包含有只读原始数据的类文件对象。Blob对象中的数据并不一定得是JavaScript中的原生形式。File接口基于Blob，继承了Blob的功能,并且扩展支持了用户计算机上的本地文件。</p>
+</blockquote>
+<p>Blob对象可以看做是存放二进制数据的容器，但要读取里面的二进制数据，需要用<code>FileReader</code>；此外还可以通过Blob设置二进制数据的MIME类型。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment">* Blob构造函数：</span></span><br><span class="line"><span class="comment">* dataArray：数组，包含了要添加到Blob对象中的数据，数据可以是Int32Array、Uint8Array、Float32Array等，或者连续内存缓冲区ArrayBuffer，ArrayBufferView， Blob，或者 DOMString对象。</span></span><br><span class="line"><span class="comment">* opt：对象，用于设置Blob对象的属性（如：MIME类型）</span></span><br><span class="line"><span class="comment">**/</span></span><br><span class="line"><span class="keyword">var</span> blob = <span class="keyword">new</span> Blob(dataArr:<span class="built_in">Array</span>&lt;any&gt;, opt:&#123;<span class="attr">type</span>:string&#125;);</span><br></pre></td></tr></table></figure>
+<ol>
+<li>创建一个装填DOMString对象的Blob对象<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> s = <span class="string">&#x27;&lt;div&gt;hello&lt;/div&gt;&#x27;</span></span><br><span class="line"><span class="keyword">var</span> blobObj = <span class="keyword">new</span> Blob([s], &#123;<span class="attr">type</span>: <span class="string">&#x27;text/xml&#x27;</span>&#125;)</span><br></pre></td></tr></table></figure></li>
+<li>创建一个装填ArrayBuffer对象的Blob对象<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> abf = <span class="keyword">new</span> <span class="built_in">ArrayBuffer</span>(<span class="number">8</span>)</span><br><span class="line"><span class="keyword">var</span> blobOjb = <span class="keyword">new</span> Blob([abf], &#123;<span class="attr">type</span>: <span class="string">&#x27;text/plain&#x27;</span>&#125;)</span><br></pre></td></tr></table></figure></li>
+<li>Blob.slice()<br>此方法返回一个新的Blob对象，包含了原Blob对象中指定范围内的数据，利用此发放可以实现大文件的分片上传<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment">* start：开始索引，默认为0</span></span><br><span class="line"><span class="comment">* end：截取结束索引（不包括end）</span></span><br><span class="line"><span class="comment">* contentType：新Blob的MIME类型，默认为空字符串</span></span><br><span class="line"><span class="comment">**/</span></span><br><span class="line">Blob.slice(start:number, <span class="attr">end</span>:number, <span class="attr">contentType</span>:string)</span><br></pre></td></tr></table></figure></li>
+<li>Canvas.toBlob()<br>canvas转为blob对象</li>
+<li>实现url下载文件<br>window.URL对象可以为Blob对象生成一个网络地址，结合a标签的download属性，可以实现点击url下载文件<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">createDownload</span>(<span class="params">fileName, content</span>)</span>&#123;</span><br><span class="line">    <span class="keyword">var</span> blob = <span class="keyword">new</span> Blob([content]);</span><br><span class="line">    <span class="keyword">var</span> link = <span class="built_in">document</span>.createElement(<span class="string">&quot;a&quot;</span>);</span><br><span class="line">    link.download = fileName;</span><br><span class="line">    link.href = URL.createObjectURL(blob); <span class="comment">//可以直接当作image的src属性来显示图片</span></span><br><span class="line">    link.click()</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="三-File"><a href="#三-File" class="headerlink" title="三. File"></a>三. File</h3><blockquote>
+<p>File是Blob的子类，比blob主要多出一个name的属性。</p>
+</blockquote>
+</li>
+</ol>
+<p>我们常用的文件选择标签<inout type="file" />元素就拥有一个files属性，这个files就是File类型</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> input = <span class="built_in">document</span>.querySelector(<span class="string">&#x27;input[type=file]&#x27;</span>);</span><br><span class="line"><span class="built_in">console</span>.log(input.files) <span class="comment">// FileList &#123;0: File(3044232), length: 1&#125;</span></span><br></pre></td></tr></table></figure>
+<h3 id="四-URL"><a href="#四-URL" class="headerlink" title="四. URL"></a>四. URL</h3><blockquote>
+<p>除了可以使用base64字符串作为内容的DataURI将一个文件嵌入到另外一个文档里，还可以使用URL对象。URL对象用于生成指向File对象或Blob对象的URL</p>
+</blockquote>
+<p><strong>实例属性：</strong></p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> url = <span class="keyword">new</span> URL(location.href)</span><br><span class="line">url.href <span class="comment">//包含完整 URL 的DOMString</span></span><br><span class="line">url.protocol <span class="comment">//包含 URL 协议名的DOMString,末尾带 &#x27;:&#x27;。</span></span><br><span class="line">url.host <span class="comment">//包含 URL 域名，&#x27;:&#x27;，和端口号的DOMString</span></span><br><span class="line">url.hostname <span class="comment">//包含 URL 域名的DOMString</span></span><br><span class="line">url.port <span class="comment">//包含 URL 端口号的DOMString</span></span><br><span class="line">url.pathname <span class="comment">//以 &#x27;/&#x27; 起头紧跟着 URL 文件路径的DOMString</span></span><br><span class="line">url.search <span class="comment">//以 &#x27;?&#x27; 起头紧跟着 URL 请求参数的DOMString</span></span><br><span class="line">url.hash <span class="comment">//以 &#x27;#&#x27; 起头紧跟着 URL 锚点标记的DOMString</span></span><br><span class="line">url.username <span class="comment">//包含在域名前面指定的用户名的DOMString</span></span><br><span class="line">url.password <span class="comment">//包含在域名前面指定的密码的DOMString</span></span><br><span class="line">url.origin <span class="comment">//返回一个包含协议名、域名和端口号的DOMString</span></span><br><span class="line">url.searchParams <span class="comment">//返回一个用来访问当前 URL GET 请求参数的URLSearchParams对象</span></span><br></pre></td></tr></table></figure>
+<p><strong>静态方法：</strong></p>
+<ul>
+<li>URL.createObjectURL()<br>该方法会创建一个 DOMString，其中包含一个表示参数中给出的对象的URL。这个 URL 的生命周期和创建它的窗口中的 document 绑定。这个新的URL 对象表示指定的 File 对象或 Blob 对象。<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> objectURL = URL.createObjectURL(blob);</span><br></pre></td></tr></table></figure>
+<code>blob</code>是用来创建 URL 的 File 对象或者 Blob 对象​</li>
+<li>URL.revokeObjectURL()<br>该方法用来释放一个之前通过调用 URL.createObjectURL() 创建的已经存在的 URL 对象。当你结束使用某个 URL 对象时，应该通过调用这个方法来让浏览器知道不再需要保持这个文件的引用了。<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">window</span>.URL.revokeObjectURL(objectURL);</span><br></pre></td></tr></table></figure>
+<code>objectURL</code>是一个 DOMString，表示通过调用 URL.createObjectURL() 方法产生的 URL 对象<h3 id="五-URLSearchParams"><a href="#五-URLSearchParams" class="headerlink" title="五. URLSearchParams"></a>五. URLSearchParams</h3><blockquote>
+<p>URLSearchParams 接口定义了一些实用的方法来处理 URL 的查询字符串。</p>
+</blockquote>
+</li>
+</ul>
+<p><strong>方法：</strong></p>
+<ul>
+<li>URLSearchParams.append() 插入一个指定的键/值对作为新的搜索参数。</li>
+<li>URLSearchParams.delete() 从搜索参数列表里删除指定的搜索参数及其对应的值。</li>
+<li>URLSearchParams.entries() 返回一个iterator可以遍历所有键/值对的对象。</li>
+<li>URLSearchParams.get() 获取指定搜索参数的第一个值。</li>
+<li>URLSearchParams.getAll() 获取指定搜索参数的所有值，返回是一个数组。</li>
+<li>URLSearchParams.has() 返回Boolean判断是否存在此搜索参数。</li>
+<li>URLSearchParams.keys() 返回iterator此对象包含了键/值对的所有键名。</li>
+<li>URLSearchParams.set() 设置一个搜索参数的新值，假如原来有多个值将删除其他所有的值。</li>
+<li>URLSearchParams.sort()  按键名排序。</li>
+<li>URLSearchParams.toString() 返回搜索参数组成的字符串，可直接使用在URL上。</li>
+<li>URLSearchParams.values() 返回iterator此对象包含了键/值对的所有值。</li>
+</ul>
+<p><strong>基本用法：</strong></p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> paramsString = <span class="string">&quot;https://www.baidu.com?topic=api&amp;target=bank&quot;</span></span><br><span class="line"><span class="keyword">var</span> searchParams = <span class="keyword">new</span> URLSearchParams(paramsString);</span><br><span class="line"></span><br><span class="line">searchParams.has(<span class="string">&#x27;topic&#x27;</span>) <span class="comment">// true</span></span><br><span class="line">searchParams.get(<span class="string">&#x27;topic&#x27;</span>) <span class="comment">// &quot;api&quot;</span></span><br><span class="line">searchParams.get(<span class="string">&#x27;target&#x27;</span>) <span class="comment">// &quot;bank&quot;</span></span><br><span class="line">searchParams.getAll(<span class="string">&#x27;topic&#x27;</span>) <span class="comment">// [&quot;api&quot;]</span></span><br><span class="line"></span><br><span class="line">searchParams.get(<span class="string">&#x27;foo&#x27;</span>) <span class="comment">// null，注意Firefox返回空字符串</span></span><br><span class="line">searchParams.set(<span class="string">&#x27;foo&#x27;</span>, <span class="number">2</span>);</span><br><span class="line">searchParams.get(<span class="string">&#x27;foo&#x27;</span>) <span class="comment">// 2</span></span><br><span class="line"></span><br><span class="line">searchParams.append(<span class="string">&#x27;topic&#x27;</span>, <span class="string">&#x27;webdev&#x27;</span>);</span><br><span class="line">searchParams.toString() <span class="comment">// &quot;q=URLUtils.searchParams&amp;topic=api&amp;foo=2&amp;topic=webdev&quot;</span></span><br><span class="line"></span><br><span class="line">searchParams.append(<span class="string">&#x27;foo&#x27;</span>, <span class="number">3</span>);</span><br><span class="line">searchParams.getAll(<span class="string">&#x27;foo&#x27;</span>) <span class="comment">// [2, 3]</span></span><br><span class="line"></span><br><span class="line">searchParams.delete(<span class="string">&#x27;topic&#x27;</span>);</span><br><span class="line">searchParams.toString() <span class="comment">// &quot;q=URLUtils.searchParams&amp;foo=2&amp;foo=3&quot;</span></span><br></pre></td></tr></table></figure>
+<p>在一些场景里使用axios发送数据时若需要以application/x-www-form-urlencoded格式发送数据，在浏览器端可以用URLSearchParams的实例当作POST数据发送，所有数据都会URL编码。（<em>请注意，由于URLSearchParams支持性不好，可以使用polyfill来转换，可以在入口文件引入</em>）</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> <span class="string">&#x27;url-search-params-polyfill&#x27;</span>;</span><br></pre></td></tr></table></figure>
+<p>在node环境里可以使用querystring模块进行编码</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> querystring = <span class="built_in">require</span>(<span class="string">&#x27;querystring&#x27;</span>);</span><br><span class="line">axios.post(<span class="string">&#x27;http://something.com/&#x27;</span>, querystring.stringify(&#123; <span class="attr">foo</span>: <span class="string">&#x27;bar&#x27;</span> &#125;);</span><br></pre></td></tr></table></figure>
+<p>DOM 的 a 元素节点的 <code>searchParams</code> 属性，就是一个 URLSearchParams 实例。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> a = <span class="built_in">document</span>.createElement(<span class="string">&#x27;a&#x27;</span>);</span><br><span class="line">a.href = <span class="string">&#x27;https://example.com?filter=api&#x27;</span>;</span><br><span class="line">a.searchParams.get(<span class="string">&#x27;filter&#x27;</span>) <span class="comment">// &quot;api&quot;</span></span><br></pre></td></tr></table></figure>
+<p>URLSearchParams 还可以与 <code>URL</code> 接口结合使用:</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> url = <span class="keyword">new</span> URL(location);</span><br><span class="line"><span class="keyword">var</span> foo = url.searchParams.get(<span class="string">&#x27;foo&#x27;</span>) || <span class="string">&#x27;somedefault&#x27;</span>;</span><br></pre></td></tr></table></figure>
 
+<h3 id="六-FileReader"><a href="#六-FileReader" class="headerlink" title="六. FileReader"></a>六. FileReader</h3><blockquote>
+<p>我们知道Blob对象只是二进制数据的容器，本身并不能操作二进制，FileReader对象就是专门操作二进制数据的，FileReader主要用于将文件内容读入内存，通过一系列<code>异步</code>接口，可以在主线程中访问本地文件。</p>
+</blockquote>
+<p><strong>创建实例：</strong></p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> reader = <span class="keyword">new</span> FileReader();</span><br></pre></td></tr></table></figure>
+<p><strong>方法(入参都是<code>File</code>或<code>Blob</code>对象)</strong></p>
+<ul>
+<li>reader.abort()  终止文件读取操作</li>
+<li>reader.readAsArrayBuffer(file)  异步按字节读取文件内容，结果用ArrayBuffer对象表示</li>
+<li>reader.readAsBinaryString(file)  异步按字节读取文件内容，结果为文件的二进制串<br>reader.readAsDataURL(file)  异步读取文件内容，结果用data:url(即Base64格式)的字符串形式表示</li>
+<li>reader.readAsText(file, encoding)  异步按字符读取文件内容，结果用字符串形式表示</li>
+</ul>
+<p><strong>事件名称</strong></p>
+<ul>
+<li>onabort  当读取操作被中止时调用</li>
+<li>onerror  当读取操作发生错误时调用</li>
+<li>onload  当读取操作成功完成时调用</li>
+<li>onloadend  当读取操作完成时调用,不管是成功还是失败</li>
+<li>onloadstart  当读取操作将要开始之前调用</li>
+<li>onprogress  在读取数据过程中周期性调用</li>
+</ul>
+<hr>
+<p><strong>它们在实际场景中的一些应用</strong></p>
+<ol>
+<li>上传图片后直接显示出来，而不用先经过后台<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> input  = <span class="built_in">document</span>.getElementById(<span class="string">&quot;file&quot;</span>); <span class="comment">//input file</span></span><br><span class="line">input.onchange = <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">    <span class="keyword">var</span> file = <span class="built_in">this</span>.files[<span class="number">0</span>];</span><br><span class="line">    <span class="keyword">if</span>(!!file)&#123;</span><br><span class="line">        <span class="keyword">var</span> reader = <span class="keyword">new</span> FileReader();</span><br><span class="line">        reader.readAsDataURL(file);</span><br><span class="line">        reader.onload = <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">            <span class="comment">//读取完毕后输出结果</span></span><br><span class="line">           <span class="built_in">document</span>.getElementById(<span class="string">&quot;file_img&quot;</span>).src = reader.result <span class="comment">//显示上传的图片</span></span><br><span class="line">           <span class="built_in">console</span>.log(reader.result);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
+<li>图片转二进制Blob<br><code>在实际文件上传中，将用户选择的图片读取为ArrayBuffer并保存到新的Blob对象中，二进制的方式传参比直接传图片效率更高)</code><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">input.addEventListener(<span class="string">&#x27;change&#x27;</span>, <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">  <span class="keyword">var</span> file = <span class="built_in">this</span>.files[<span class="number">0</span>],</span><br><span class="line">      fr = <span class="keyword">new</span> FileReader(),</span><br><span class="line">      blob;</span><br><span class="line">  fr.onload = <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">      blob = <span class="keyword">new</span> Blob([<span class="built_in">this</span>.result]);</span><br><span class="line">      <span class="keyword">var</span> formdata = <span class="keyword">new</span> FormData()</span><br><span class="line">      formdata.append(<span class="string">&#x27;file&#x27;</span>, blob)</span><br><span class="line">  &#125;;</span><br><span class="line">  fr.readAsArrayBuffer(file)</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure></li>
+<li>图片Image转Base64<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">getImgToBase64</span>(<span class="params">url,callback</span>)</span>&#123;</span><br><span class="line">    <span class="keyword">var</span> canvas = <span class="built_in">document</span>.createElement(<span class="string">&#x27;canvas&#x27;</span>)</span><br><span class="line">    <span class="keyword">var</span> ctx = canvas.getContext(<span class="string">&#x27;2d&#x27;</span>)</span><br><span class="line">    <span class="keyword">var</span> img = <span class="keyword">new</span> Image</span><br><span class="line">    img.crossOrigin = <span class="string">&#x27;Anonymous&#x27;</span>;</span><br><span class="line">    img.onload = <span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">        canvas.height = img.height;</span><br><span class="line">        canvas.width = img.width;</span><br><span class="line">        ctx.drawImage(img,<span class="number">0</span>,<span class="number">0</span>);</span><br><span class="line">        <span class="keyword">var</span> dataURL = canvas.toDataURL(<span class="string">&#x27;image/png&#x27;</span>); <span class="comment">//base64格式</span></span><br><span class="line">        callback(dataURL);</span><br><span class="line">        canvas = <span class="literal">null</span>;</span><br><span class="line">    &#125;;</span><br><span class="line">    img.src = url;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
+<li>Base64转为<code>Blob</code>、<code>File</code><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">base64ToBlob</span>(<span class="params">base64</span>)</span>&#123;</span><br><span class="line">    <span class="keyword">var</span> arr = base64.split(<span class="string">&#x27;,&#x27;</span>)</span><br><span class="line">    <span class="keyword">var</span> mime = arr[<span class="number">0</span>].match(<span class="regexp">/:(.*?);/</span>)[<span class="number">1</span>]</span><br><span class="line">    <span class="keyword">var</span> bytes = atob(arr[<span class="number">1</span>])      <span class="comment">//对用base64编码过的二进制进行解码  </span></span><br><span class="line">    <span class="keyword">var</span> n = bytes.length</span><br><span class="line">    <span class="keyword">var</span> u8arr = <span class="keyword">new</span> <span class="built_in">Uint8Array</span>(n)</span><br><span class="line">    <span class="keyword">while</span>(n--)&#123;</span><br><span class="line">        u8arr[n]=bytes.charCodeAt(n);   <span class="comment">//将编码转换成Unicode编码</span></span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">new</span> Blob([u8arr], &#123;<span class="attr">type</span>: mime&#125;)</span><br><span class="line">    <span class="comment">//or: return new File(u8arr], &#123;type:mime&#125;)  //base64转换为文件</span></span><br><span class="line"></span><br><span class="line">   <span class="comment">//以二进制的方式传参：</span></span><br><span class="line">    <span class="keyword">var</span> formdata = <span class="keyword">new</span> FormData()</span><br><span class="line">    formdata.append(<span class="string">&#x27;file&#x27;</span>, <span class="keyword">new</span> Blob([u8arr], &#123;<span class="attr">type</span>: mime&#125;))</span><br><span class="line">    xhr.send(formdata)</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure></li>
+</ol>
+
+      
+
+      
+        <div class="page-reward">
+          <a href="javascript:;" class="page-reward-btn tooltip-top">
+            <div class="tooltip tooltip-east">
+            <span class="tooltip-item">
+              赏
+            </span>
+            <span class="tooltip-content">
+              <span class="tooltip-text">
+                <span class="tooltip-inner">
+                  <p class="reward-p"><i class="icon icon-quo-left"></i>谢谢你请我吃糖果<i class="icon icon-quo-right"></i></p>
+                  <div class="reward-box">
+                    
+                    
+                  </div>
+                </span>
+              </span>
+            </span>
+          </div>
+          </a>
         </div>
-        <div class="clearfix"></div>
-    </header>
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">技术</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">javascript</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+
+      
+
+      
+        
+<div class="share-btn share-icons tooltip-left">
+  <div class="tooltip tooltip-east">
+    <span class="tooltip-item">
+      <a href="javascript:;" class="share-sns share-outer">
+        <i class="icon icon-share"></i>
+      </a>
+    </span>
+    <span class="tooltip-content">
+      <div class="share-wrap">
+        <div class="share-icons">
+          <a class="weibo share-sns" href="javascript:;" data-type="weibo">
+            <i class="icon icon-weibo"></i>
+          </a>
+          <a class="weixin share-sns wxFab" href="javascript:;" data-type="weixin">
+            <i class="icon icon-weixin"></i>
+          </a>
+          <a class="qq share-sns" href="javascript:;" data-type="qq">
+            <i class="icon icon-qq"></i>
+          </a>
+          <a class="douban share-sns" href="javascript:;" data-type="douban">
+            <i class="icon icon-douban"></i>
+          </a>
+          <a class="qzone share-sns" href="javascript:;" data-type="qzone">
+            <i class="icon icon-qzone"></i>
+          </a>
+          <a class="facebook share-sns" href="javascript:;" data-type="facebook">
+            <i class="icon icon-facebook"></i>
+          </a>
+          <a class="twitter share-sns" href="javascript:;" data-type="twitter">
+            <i class="icon icon-twitter"></i>
+          </a>
+          <a class="google share-sns" href="javascript:;" data-type="google">
+            <i class="icon icon-google"></i>
+          </a>
+        </div>
+      </div>
+    </span>
+  </div>
+</div>
+
+<div class="page-modal wx-share js-wx-box">
+    <a class="close js-modal-close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <div class="wx-qrcode">
+      <img src="//pan.baidu.com/share/qrcode?url=https://jakever.github.io/2019/09/26/%E8%AF%A6%E8%A7%A3FormData%20%E3%80%81Blob%E3%80%81File%E3%80%81FileReader%E3%80%81ArrayBuffer/" alt="微信分享二维码">
+    </div>
+</div>
+
+<div class="mask js-mask"></div>
+      
+      <div class="clearfix"></div>
+    </div>
   </div>
 </article>
+
+  
+<nav id="article-nav">
+  
+    <a href="/2019/09/27/Canvan%E6%8B%96%E6%8B%BD%E7%BB%98%E5%88%B6%E5%A4%9A%E8%BE%B9%E5%BD%A2%EF%BC%8CCanvan%E5%AE%9E%E7%8E%B0%E5%9B%BE%E7%89%87%E5%8F%8D%E8%BD%AC/" id="article-nav-newer" class="article-nav-link-wrap">
+      <i class="icon-circle-left"></i>
+      <div class="article-nav-title">
+        
+          Canvan拖拽绘制多边形，Canvan实现图片反转显示为底片效果
+        
+      </div>
+    </a>
   
   
-    </div></section>
+</nav>
+
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+  
+  
   
 
-    
+  
+
+  
+
+  
 
 
           </div>
@@ -234,15 +458,15 @@
 	var yiliaConfig = {
 		mathjax: false,
 		isHome: false,
-		isPost: false,
-		isArchive: true,
+		isPost: true,
+		isArchive: false,
 		isTag: false,
 		isCategory: false,
 		open_in_new: false,
 		toc_hide_index: true,
 		root: "/",
 		innerArchive: true,
-		showTags: false
+		showTags: true
 	}
 </script>
 
@@ -302,6 +526,22 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
             <input type="checkbox" q-on="click:toggleTag(e)" q-attr="checked:showTags">
           </label>
           <ul class="article-tag-list" q-show="showTags">
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">技术</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">javascript</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">canvas</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">git</a>
+              </li>
             
             <div class="clearfix"></div>
           </ul>
@@ -365,14 +605,6 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
           
             <li class="search-li">
               <a href="http://localhost:4000/" target="_blank" class="search-title"><i class="icon-quo-left icon"></i>友情链接4</a>
-            </li>
-          
-            <li class="search-li">
-              <a href="http://localhost:4000/" target="_blank" class="search-title"><i class="icon-quo-left icon"></i>友情链接5</a>
-            </li>
-          
-            <li class="search-li">
-              <a href="http://localhost:4000/" target="_blank" class="search-title"><i class="icon-quo-left icon"></i>友情链接6</a>
             </li>
           
         </ul>
