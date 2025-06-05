@@ -6,35 +6,18 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
   <link rel="dns-prefetch" href="https://jakever.github.io">
-  <title>git merge原理(递归三路合并算法) | Harlen&#39;s Blog</title>
+  <title>Archives: 2019/11 | Harlen&#39;s Blog</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="git merge原理（递归三路合并算法），我们知道git 合并文件是以行为单位进行一行一行进行合并的，但是有些时候并不是两行内容不一样git就会报冲突，因为smart git 会帮我们自动帮我们进行取舍，分析出那个结果才是我们所期望的，如果smart git 都无法进行取舍时候才会报冲突，这个时候才需要我们进行人工干预。那git 是如何帮我们进行Smart 操作的呢？">
-<meta property="og:type" content="article">
-<meta property="og:title" content="git merge原理(递归三路合并算法)">
-<meta property="og:url" content="https://jakever.github.io/2019/10/05/git-merge%E5%8E%9F%E7%90%86/index.html">
+  <meta name="description" content="喜欢登山，热爱大自然，年轻无为，搬砖为生，生死看淡，不服就干">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Harlen&#39;s Blog">
+<meta property="og:url" content="https://jakever.github.io/archives/2019/11/index.html">
 <meta property="og:site_name" content="Harlen&#39;s Blog">
-<meta property="og:description" content="git merge原理（递归三路合并算法），我们知道git 合并文件是以行为单位进行一行一行进行合并的，但是有些时候并不是两行内容不一样git就会报冲突，因为smart git 会帮我们自动帮我们进行取舍，分析出那个结果才是我们所期望的，如果smart git 都无法进行取舍时候才会报冲突，这个时候才需要我们进行人工干预。那git 是如何帮我们进行Smart 操作的呢？">
+<meta property="og:description" content="喜欢登山，热爱大自然，年轻无为，搬砖为生，生死看淡，不服就干">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/11893784-ac1aa0ab4e4c062d.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
-<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/11893784-edfd06252fc28010.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
-<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/11893784-6b0f41a62e828d38.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
-<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/11893784-9a84cfdfccaf0b13.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
-<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/11893784-8d037984213d4de3.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
-<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/11893784-17049a5c52342eff.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
-<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/11893784-d3f4ee2ff49ad2e2.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
-<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/11893784-dd7c37d9ad0131d5.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
-<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/11893784-4e9f5fa2d10b21ae.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
-<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/11893784-501af1daa07fa1ec.gif?imageMogr2/auto-orient/strip">
-<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/11893784-60de2a661410443b.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
-<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/11893784-33e3fb9b10bdbc37.gif?imageMogr2/auto-orient/strip">
-<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/11893784-81e235745a022292.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
-<meta property="article:published_time" content="2019-10-05T11:20:38.000Z">
-<meta property="article:modified_time" content="2020-09-30T13:18:09.873Z">
 <meta property="article:author" content="Harlen">
-<meta property="article:tag" content="JavaScript">
-<meta property="article:tag" content="Git">
+<meta property="article:tag" content="前端,js,javascript,html5,nodejs,开发者,程序猿,程序媛,极客,编程,代码,开源,IT网站,Developer,Programmer,Coder,Geek,html,css,css3,用户体验">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="https://upload-images.jianshu.io/upload_images/11893784-ac1aa0ab4e4c062d.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
   
     <link rel="alternative" href="/atom.xml" title="Harlen&#39;s Blog" type="application/atom+xml">
   
@@ -52,7 +35,7 @@
 
   
 
-<meta name="generator" content="Hexo 5.2.0"></head>
+<meta name="generator" content="Hexo 5.4.2"></head>
 
 <body>
   <div id="container" q-class="show:isCtnShow">
@@ -186,117 +169,36 @@
             <canvas data-colors="#eaeaea" data-sectionHeight="100" data-contentId="js-content" id="myCanvas1" class="anm-canvas"></canvas>
           </div>
           <div id="js-content" class="content-ll">
-            <article id="post-git-merge原理" class="article article-type-post " itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
+            
   
-    <h1 class="article-title" itemprop="name">
-      git merge原理(递归三路合并算法)
+  
+    
+    
+      
+      
+      <section class="archives-wrap">
+        <div class="archive-year-wrap">
+          <a href="/archives/2019" class="archive-year">2019</a>
+        </div>
+        <div class="archives">
+    
+    <article class="archive-article archive-type-post">
+  <div class="archive-article-inner">
+    <header class="archive-article-header">
+      	<div class="article-meta">
+	      	<a href="/2019/11/22/commit%E8%87%AA%E5%8A%A8%E7%94%9F%E6%88%90changelog/" class="archive-article-date">
+  	<time datetime="2019-11-21T16:00:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-11-22</time>
+</a>
+        </div>
+    	 
+  
+    <h1 itemprop="name">
+      <a class="archive-article-title" href="/2019/11/22/commit%E8%87%AA%E5%8A%A8%E7%94%9F%E6%88%90changelog/">git commit自动生产chagelog</a>
     </h1>
   
 
-        
-        <a href="/2019/10/05/git-merge%E5%8E%9F%E7%90%86/" class="archive-article-date">
-  	<time datetime="2019-10-05T11:20:38.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-10-05</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h3 id="merge的基本原理"><a href="#merge的基本原理" class="headerlink" title="merge的基本原理"></a>merge的基本原理</h3><p>我们知道git 合并文件是以行为单位进行一行一行进行合并的，但是有些时候并不是两行内容不一样git就会报冲突，因为smart git 会帮我们自动帮我们进行取舍，分析出那个结果才是我们所期望的，如果smart git 都无法进行取舍时候才会报冲突，这个时候才需要我们进行人工干预。那git 是如何帮我们进行Smart 操作的呢？</p>
-<h3 id="二路合并"><a href="#二路合并" class="headerlink" title="二路合并"></a>二路合并</h3><p>二路合并算法就是讲两个文件进行逐行对别，如果行内容不同就报冲突。<img src="https://upload-images.jianshu.io/upload_images/11893784-ac1aa0ab4e4c062d.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="git1.png"><br>Mine 代表你本地修改…<br>Theirs 代表其他人修改…<br>假设对于同一个文件，出现你和其他人一起修改，此时如果git来进行合并，git就懵逼了，因为Git既不敢得罪你(Mine)，也不能得罪他们(Theirs) 无理无据，git只能让你自己搞了，但是这种情况太多了而且也没有必要…</p>
-<h3 id="三路合并"><a href="#三路合并" class="headerlink" title="三路合并"></a>三路合并</h3><p>三路合并就是先找出一个基准，然后以基准为Base 进行合并，如果2个文件相对基准(base)都发生了改变 那git 就报冲突，然后让你人工决断。否则，git将取相对于基准(base)变化的那个为最终结果。<img src="https://upload-images.jianshu.io/upload_images/11893784-edfd06252fc28010.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="git2.png"><br>Base 代表上一个版本，即公共祖先…<br>Mine 代表你本地修改…<br>Theirs 代表其他人修改…<br>这样当git进行合并的时候，git就知道是其他人修改了，本地没有更改，git就会自动把最终结果变成如下：<img src="https://upload-images.jianshu.io/upload_images/11893784-6b0f41a62e828d38.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="git3.png"><br><strong>如果换成下面的这样，就需要人工解决了：</strong><br><img src="https://upload-images.jianshu.io/upload_images/11893784-9a84cfdfccaf0b13.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="git4.png"><br>上面就是git merge 最基本的原理 “三路合并”。</p>
-<h3 id="深入原理分析"><a href="#深入原理分析" class="headerlink" title="深入原理分析"></a>深入原理分析</h3><p>下面面的合并就是我们常见的分支graph,结合具体分析：<img src="https://upload-images.jianshu.io/upload_images/11893784-8d037984213d4de3.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="git5.png"><br>上面①~⑨代表一个个修改集合(commit)每个commit都有一个唯一7位SHA-1唯一表示。<br>①，②，④，⑦修改集串联起来就是一个链，此时用master指向这个集合就代表master分支，<strong>分支本质是一个快照，其实类比C中指针</strong><br>同样dev分支也是由一个个commit组成<br>现在在dev分支上由于各种原因要运行git merge master需要把master分支的更新合并到dev分支上，本质上就是合并修改集 ⑦(Mine) 和 ⑧(Theirs) ，此时我们要 利用DAG(有向无环图)相关算法找到我们公共的祖先 ②（Base）然后进行三方合并，最后合并生成 ⑨</p>
-<p>git merge-base –all commit_id1(Yours/Theirs) commit_id2(Yours/Theirs) 就能找出公共祖先的commitId(Base)</p>
-<p>图虽然复杂 但是核心原理是不变的，下面我们看 另外一个稍微高级一点的核心原理”递归三路合并” 也是我们很常见看到 git merge 输出的 recursive strategy</p>
-<h4 id="递归三路合并原理"><a href="#递归三路合并原理" class="headerlink" title="递归三路合并原理"></a>递归三路合并原理</h4><p>下图中我们如果要合并 ⑦(source) -&gt; ⑥(destination)：<img src="https://upload-images.jianshu.io/upload_images/11893784-17049a5c52342eff.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="git6.png"><br>简短描述下 如何会出现上面的图：</p>
-<ul>
-<li>在master分支上新建文件foo.c ,写入数据”A”到文件里面</li>
-<li>新建分支task2 git checkout -b task2 0,0 代表commit Id</li>
-<li>新建并提交commit ① 和 ③</li>
-<li>切换分支到master，新建并提交commit ②</li>
-<li>新建并修改foo.c文件中数据为”B”,并提交commit ④</li>
-<li>merge commit ③ git merge task2,生成commit ⑥</li>
-<li>新建分支task1 git chekcout -b ④</li>
-<li>在task1 merge ③ git merge task2 生成commit ⑤</li>
-<li>新建commit ⑦，并修改foo.c文件内容为”C”</li>
-<li>切换分支到master上，并准备merge task1 分支(merge ⑦-&gt; ⑥)</li>
-</ul>
-<p>从上面我们DAG图可以知道公共祖先有③和④，那到底选择哪个呢，我们分别来看：<br>如果选择③作为公共祖先 根据最基本的三路合并，可以看到最终结果⑧ 将需要手动解决冲突 /foo.c = BC???<img src="https://upload-images.jianshu.io/upload_images/11893784-d3f4ee2ff49ad2e2.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="git7.png"><br>如果选择④作为公共祖先 根据最基本的三路合并，可以看到最终结果⑧ 将得到 /foo.c=C<img src="https://upload-images.jianshu.io/upload_images/11893784-dd7c37d9ad0131d5.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="git8.png"><br>最终期待的结果是什么？</p>
-<ul>
-<li>我们在Master上也是所有分支的起点定义了 /foo.c = A,在task2 分支上并没有进行任何修改。</li>
-<li>最初修改 /foo.c = B 是在master 分支上，修改集④ 上修改为 /foo.c = B</li>
-<li>第一次通过 ③，④ 合并生成 ⑥， 最终使得Master分支上 ⑥ /foo.c = B</li>
-<li>第二次通过 ③，④ 又合并生成 ⑤， 最终使得task1分支上 ⑤ /foo.c = B</li>
-<li>在task1分支上不希望 /foo.c = B ,所以在task1上新建一个⑦ /foo.c = C</li>
-<li>我们知道 foo.c = B 是在 master分支上 ④ 进行修改的，其他的/foo.c = B 都是来自④这次修改。</li>
-<li>我们能从图上可以知道 ⑦ 的修改一定是在 ④ 之后的，并不是因为⑦ &gt; ④ 而是 ④ 是 ⑦ 的祖先节点，所以我们知道最终的修改合并之后就应该保留 /foo.c = C</li>
-</ul>
-<p>所以 我们的最佳公共祖先应该是4，最终结果应该是 /foo.c = C<br>git 如何选择公共祖先呢？</p>
-<p>你可能会说用 git merge-base ⑥ ⑦ 输出的是 ④ 但是git 就真的是用 ④ 做祖先吗 ？答案是No</p>
-<blockquote>
-<p>When the history involves criss-cross merges, there can be more than one best common ancestor for two commits. For example, with this topology:</p>
-</blockquote>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">---1---o---A</span><br><span class="line">    \ &#x2F; </span><br><span class="line">     X </span><br><span class="line">    &#x2F; \</span><br><span class="line">---2---o---o---B</span><br></pre></td></tr></table></figure>
-<blockquote>
-<p>both 1 and 2 are merge-bases of A and B. Neither one is better than the other (both are best merge bases). When the –all option is not given, it is unspecified which best one is output.</p>
-</blockquote>
-<p>从git的解释中，我们就知道 如果有2个都是最佳公共祖先时候，这个时候git 会随便输出一个不确定公共祖先。</p>
-<p>git 是这样进行合并的：</p>
-<ul>
-<li>git 既不是直接用③，也不是用④，而是将2个祖先进行合并成一个虚拟的 X /foo.c = B, 因为③ 和 ④ 公共祖先是 〇/foo.c = A</li>
-<li>git 用 X 做为 base 合并 ⑥ 和 ⑦ 结果就是 /foo.c = C</li>
-</ul>
-<p>那什么又叫递归(recursive)合并呢 ? 我们合并 ⑥ 和 ⑦ 的时候，我们将其 2 个公共祖先③ 和 ④ 进行 merge 为 X ,在合并 ③ 和 ④时候 我们又需要找到 他们的公共祖先，此时可能又有多个公共祖先，我们又需要将他们先进行合并，如此就是递归了 也就是 recursive merge，如下：<img src="https://upload-images.jianshu.io/upload_images/11893784-4e9f5fa2d10b21ae.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="git9.png"></p>
-<h4 id="合并策略（git-merge）"><a href="#合并策略（git-merge）" class="headerlink" title="合并策略（git merge）"></a>合并策略（git merge）</h4><p>当项目中包含多条功能分支时，有时就需要使用 git merge 命令，指定将某个分支的提交合并到当前分支。Git 中有两个合并策略：fast-forward 和 no-fast-forward。</p>
-<h5 id="fast-forward"><a href="#fast-forward" class="headerlink" title="fast-forward"></a>fast-forward</h5><p>fast-forward（–ff） 意为快进式合并，如果当前分支在合并分支前，没有做过额外提交。那么合并分支的过程不会产生的新的提交记录，而是直接将分支上的提交添加进来，这称为 fast-forward 合并。<img src="https://upload-images.jianshu.io/upload_images/11893784-501af1daa07fa1ec.gif?imageMogr2/auto-orient/strip" alt="git13.gif"></p>
-<p>很多时候我们在找2个修改集合X,Y 公共祖先的时候，会发现公共祖先就是他们中的一个，此时我们进行merge 的时候，就是Fast-Forward即可，不会产生一个新的Commit 用于merge X和Y 。看懂下面这个例子你就明白了：<img src="https://upload-images.jianshu.io/upload_images/11893784-60de2a661410443b.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="git10.png"><br>当merge ② 和 ⑥时候 由于②是公共祖先，所以进行Fast-Forward 合并，直接指向⑥ 不用生成一个新的⑧进行merge了。</p>
-<h5 id="no-fast-forward"><a href="#no-fast-forward" class="headerlink" title="no-fast-forward"></a>no-fast-forward</h5><p>no-fast-forward（–no-ff）意为非快进式合并，fast-forward的场景很少遇到，基本是：在当前分支分离出子分支后（比如分支dev），后续会有其他分支合并进来的修改，而分离出的dev分支也做了修改。这个时候再使用git merge，就会触发 no-fast-forward 策略了。</p>
-<p>在 no-fast-forward 策略下，Git 会在当前分支（active branch）额外创建一个新的 合并提交（merging commit）。这条提交记录既指向当前分支，又指向合并分支。<img src="https://upload-images.jianshu.io/upload_images/11893784-33e3fb9b10bdbc37.gif?imageMogr2/auto-orient/strip" alt="git12.gif"></p>
-<p>看懂下面这个例子你就明白了：<br><img src="https://upload-images.jianshu.io/upload_images/11893784-81e235745a022292.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="git11.png"><br>现在 f 提交是我们正在合并的提交</p>
-<p>如果现在找 e 和 d 的共同祖先，你会发现并不唯一，b 和 c 都是。那么此时怎么合并呢？</p>
-<p>git 会首先将 b 和 c 合并成一个虚拟的提交 x，这个 x 当作 e 和 d 的共同祖先。</p>
-<p>而要合并 b 和 c，也需要进行同样的操作，即找到一个共同的祖先 a。</p>
-<p>我们这里的 a、b、c 只是个比较简单的例子，实际上提交树往往更加复杂，这就需要不断重复以上操作以便找到一个真实存在的共同祖先，而这个操作是递归的。这便是“递归三路合并”的含义。</p>
-<p>这是 git 合并时默认采用的策略。</p>
-<h4 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h4><p><a target="_blank" rel="noopener" href="https://git-scm.com/doc">git官方文档</a><br><a target="_blank" rel="noopener" href="https://segmentfault.com/a/1190000021712743">git merge原理</a><br><a target="_blank" rel="noopener" href="https://www.pianshen.com/article/1180264711/">git merge的合并原理</a></p>
-
-      
-
-      
-        <div class="page-reward">
-          <a href="javascript:;" class="page-reward-btn tooltip-top">
-            <div class="tooltip tooltip-east">
-            <span class="tooltip-item">
-              赏
-            </span>
-            <span class="tooltip-content">
-              <span class="tooltip-text">
-                <span class="tooltip-inner">
-                  <p class="reward-p"><i class="icon icon-quo-left"></i>谢谢老板打赏，祝老板永无BUG<i class="icon icon-quo-right"></i></p>
-                  <div class="reward-box">
-                    
-                    
-                    <div class="reward-box-item">
-                      <img class="reward-img" src="/assets/img/weixin_reward.jpg">
-                      <span class="reward-type">微信</span>
-                    </div>
-                    
-                  </div>
-                </span>
-              </span>
-            </span>
-          </div>
-          </a>
-        </div>
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
+        <div class="article-info info-on-right">
+          
 	<div class="article-tag tagcloud">
 		<i class="icon-price-tags icon"></i>
 		<ul class="article-tag-list">
@@ -304,152 +206,83 @@
         		<li class="article-tag-list-item">
         			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">JavaScript</a>
         		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">Git</a>
-        		</li>
       		
 		</ul>
 	</div>
 
-      
+          
 	<div class="article-category tagcloud">
 		<i class="icon-book icon"></i>
 		<ul class="article-tag-list">
 			 
         		<li class="article-tag-list-item">
-        			<a href="/categories/前端开发//" class="article-tag-list-link color5">前端开发</a>
+        			<a href="/categories/开发工具//" class="article-tag-list-link color5">开发工具</a>
         		</li>
       		
 		</ul>
 	</div>
 
 
-      
-
-      
-        
-<div class="share-btn share-icons tooltip-left">
-  <div class="tooltip tooltip-east">
-    <span class="tooltip-item">
-      <a href="javascript:;" class="share-sns share-outer">
-        <i class="icon icon-share"></i>
-      </a>
-    </span>
-    <span class="tooltip-content">
-      <div class="share-wrap">
-        <div class="share-icons">
-          <a class="weibo share-sns" href="javascript:;" data-type="weibo">
-            <i class="icon icon-weibo"></i>
-          </a>
-          <a class="weixin share-sns wxFab" href="javascript:;" data-type="weixin">
-            <i class="icon icon-weixin"></i>
-          </a>
-          <a class="qq share-sns" href="javascript:;" data-type="qq">
-            <i class="icon icon-qq"></i>
-          </a>
-          <a class="douban share-sns" href="javascript:;" data-type="douban">
-            <i class="icon icon-douban"></i>
-          </a>
-          <a class="qzone share-sns" href="javascript:;" data-type="qzone">
-            <i class="icon icon-qzone"></i>
-          </a>
-          <a class="facebook share-sns" href="javascript:;" data-type="facebook">
-            <i class="icon icon-facebook"></i>
-          </a>
-          <a class="twitter share-sns" href="javascript:;" data-type="twitter">
-            <i class="icon icon-twitter"></i>
-          </a>
-          <a class="google share-sns" href="javascript:;" data-type="google">
-            <i class="icon icon-google"></i>
-          </a>
         </div>
-      </div>
-    </span>
-  </div>
-</div>
-
-<div class="page-modal wx-share js-wx-box">
-    <a class="close js-modal-close" href="javascript:;"><i class="icon icon-close"></i></a>
-    <p>扫一扫，分享到微信</p>
-    <div class="wx-qrcode">
-      <img src="//pan.baidu.com/share/qrcode?url=https://jakever.github.io/2019/10/05/git-merge%E5%8E%9F%E7%90%86/" alt="微信分享二维码">
-    </div>
-</div>
-
-<div class="mask js-mask"></div>
-      
-      <div class="clearfix"></div>
-    </div>
+        <div class="clearfix"></div>
+    </header>
   </div>
 </article>
-
   
-<nav id="article-nav">
-  
-  
-    <a href="/2019/10/02/JS%E4%BA%8B%E4%BB%B6%E5%BE%AA%E7%8E%AF%E6%9C%BA%E5%88%B6/" id="article-nav-older" class="article-nav-link-wrap">
-      <div class="article-nav-title">JS事件循环机制</div>
-      <i class="icon-circle-right"></i>
-    </a>
-  
-</nav>
-
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
+    
+    
+    <article class="archive-article archive-type-post">
+  <div class="archive-article-inner">
+    <header class="archive-article-header">
+      	<div class="article-meta">
+	      	<a href="/2019/11/02/DOM%E9%80%89%E5%8C%BA%E6%93%8D%E4%BD%9C/" class="archive-article-date">
+  	<time datetime="2019-11-01T16:00:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-11-02</time>
+</a>
         </div>
-        
-        
-    </div>
-</aside>
-
-
-
+    	 
   
-  
-  
-  <div id="cloud-tie-wrapper" class="cloud-tie-wrapper"></div>
-<script>
-  var cloudTieConfig = {
-    url: "https://jakever.github.io/2019/10/05/git-merge%E5%8E%9F%E7%90%86/", 
-    sourceId: "git-merge原理",
-    productKey: "true",
-    target: "cloud-tie-wrapper"
-  };
-</script>
-<script src="//img1.cache.netease.com/f2e/tie/yun/sdk/loader.js"></script>
+    <h1 itemprop="name">
+      <a class="archive-article-title" href="/2019/11/02/DOM%E9%80%89%E5%8C%BA%E6%93%8D%E4%BD%9C/">DOM选区操作</a>
+    </h1>
   
 
+        <div class="article-info info-on-right">
+          
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">JavaScript</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+          
+	<div class="article-category tagcloud">
+		<i class="icon-book icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="/categories/Web//" class="article-tag-list-link color4">Web</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+
+        </div>
+        <div class="clearfix"></div>
+    </header>
+  </div>
+</article>
+  
+  
+    </div></section>
   
 
-  
-    <section id="comments">
-      <div id="disqus_thread"></div>
-        <script type="text/javascript">
-        /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
-        var disqus_shortname = 'true'; // required: replace example with your forum shortname
-
-        /* * * DON'T EDIT BELOW THIS LINE * * */
-        (function() {
-          var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
-          dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
-          (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
-        })();
-      </script>
-      <noscript>Please enable JavaScript to view the <a target="_blank" rel="noopener" href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
-    </section>
-  
-
-  
+    
 
 
           </div>
@@ -459,7 +292,7 @@
   <div class="outer">
     <div id="footer-info">
     	<div class="footer-left">
-    		&copy; 2020 Harlen
+    		&copy; 2025 Harlen
     	</div>
       	<div class="footer-right">
       		Created by <a href="https://github.com/jakever" target="_blank">Harlen</a>
@@ -472,8 +305,8 @@
 	var yiliaConfig = {
 		mathjax: false,
 		isHome: false,
-		isPost: true,
-		isArchive: false,
+		isPost: false,
+		isArchive: true,
 		isTag: false,
 		isCategory: false,
 		open_in_new: false,
@@ -546,11 +379,35 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">CI/CI</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color2">Canvas</a>
               </li>
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">React</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">Git</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">docker</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">CSS</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">工程化</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">数据库</a>
               </li>
             
             <div class="clearfix"></div>
